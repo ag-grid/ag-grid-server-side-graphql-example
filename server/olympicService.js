@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 
-const connection = mysql.createConnection({host: 'localhost', user: 'root', password: 'newrob12'});
+const connection = mysql.createConnection({host: 'localhost', user: 'root', password: 'password123'});
 
 export function fetchRows(args, resultCallback) {
   connection.query(buildSql(args), resultCallback);
