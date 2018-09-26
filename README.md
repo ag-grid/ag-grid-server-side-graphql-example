@@ -4,7 +4,7 @@ A reference implementation showing how to perform server-side operations with Gr
 
 ![](https://github.com/ag-grid/ag-grid/blob/latest/packages/ag-grid-docs/src/graphql-server-side-operations/graphql-arch.png "")
 
-For full details see: http://ag-grid.com/graphql-server-side-operations/
+For full details see: http://ag-grid.com/graphql-server-side-operations/ (Will be available in v19.1.x)
 
 ## Usage
 
