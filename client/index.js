@@ -9,8 +9,8 @@ import ServerSideDatasource from './ServerSideDatasource'
 const columnDefs = [
   {field: 'athlete'},
   {field: 'country', enableRowGroup: true, rowGroup: true, hide: true},
-  {field: 'year', enableRowGroup: true, rowGroup: true, hide: true},
-  {field: 'sport', enableRowGroup: true, rowGroup: false, hide: false},
+  {field: 'sport', enableRowGroup: true, rowGroup: true, hide: true},
+  {field: 'year'},
   {field: 'age'},
   {field: 'gold', type: 'valueColumn'},
   {field: 'silver', type: 'valueColumn'},
@@ -24,7 +24,7 @@ const gridOptions = {
   rowModelType: 'serverSide',
 
   // fetch 100 rows per at a time
-  cacheBlockSize: 100,
+  cacheBlockSize: 200,
 
   // only keep 10 blocks of rows
   maxBlocksInCache: 10,
@@ -34,10 +34,6 @@ const gridOptions = {
   enableColResize: true,
   enableSorting: true,
   enableFilter: true,
-
-  onGridReady: function (params) {
-    params.api.sizeColumnsToFit();
-  },
 
   columnTypes: {
     dimension: {

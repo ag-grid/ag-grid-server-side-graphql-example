@@ -8,13 +8,14 @@ class ServerSideDatasource {
   }
 
   getRows(params) {
-    console.log('ag-Grid Request: ', params.request);
+    let jsonRequest = JSON.stringify(params.request, null, 2);
+    console.log(jsonRequest);
+
     const columns = this.gridOptions.columnDefs;
 
     // query GraphQL endpoint
     this.client.query(query(params.request, columns))
       .then(response => {
-
         const rows = response.data.rows;
 
         // determine last row to size scrollbar and last block size correctly
@@ -34,9 +35,18 @@ class ServerSideDatasource {
 }
 
 const query = (request, columns) => {
+
+  const fields = columns.map(col => col.field);
+
   return {
     query: gql`
-      query GetRows($start: Int, $end: Int, $sortModel: [SortModel], $groups: [RowGroup], $groupKeys: [String]) {
+      query GetRows(
+          $start: Int, 
+          $end: Int, 
+          $sortModel: [SortModel], 
+          $groups: [RowGroup], 
+          $groupKeys: [String]
+        ) {
         rows(
           startRow: $start,    
           endRow: $end,
@@ -44,38 +54,18 @@ const query = (request, columns) => {
           rowGroups: $groups, 
           groupKeys: $groupKeys       
         ) {
-          ${getFields(columns)}
+          ${fields}
         }
       }
     `,
     variables: {
       start: request.startRow,
       end: request.endRow,
-      sortModel: mapSortModel(request),
-      groups: mapGroups(request),
-      groupKeys: mapGroupKeys(request)
+      sortModel: request.sortModel,
+      groups: request.rowGroupCols,
+      groupKeys: request.groupKeys
     },
   }
-};
-
-const getFields = (columnDefs) => {
-  return columnDefs.map(colDef => colDef.field).join();
-};
-
-const mapGroups = (request) => {
-  return request.rowGroupCols.map(grp => {
-    return { colId: grp.field }
-  });
-};
-
-const mapGroupKeys = (request) => {
-  return request.groupKeys.map(key => key.toString());
-};
-
-const mapSortModel = (request) => {
-  return request.sortModel.map(srt => {
-    return { colId: srt.colId, sort: srt.sort }
-  });
 };
 
 export default ServerSideDatasource;

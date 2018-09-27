@@ -29,8 +29,9 @@ const typeDefs = `
     }
     
     input RowGroup {
-      colId: String
-      aggFunc: String
+      id: String
+      field: String
+      displayName: String         
     }
 `;
 

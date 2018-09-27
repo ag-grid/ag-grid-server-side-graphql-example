@@ -1,6 +1,6 @@
 import mysql from 'mysql';
 
-const connection = mysql.createConnection({host: 'localhost', user: 'root', password: 'password123'});
+const connection = mysql.createConnection({host: 'localhost', user: 'root', password: 'newrob12'});
 
 export function fetchRows(args, resultCallback) {
   connection.query(buildSql(args), resultCallback);
@@ -20,7 +20,7 @@ const select = args => {
   if (args.rowGroups.length > 0) {
     let groupsToUse = args.rowGroups.slice(args.groupKeys.length, args.groupKeys.length + 1);
     if (groupsToUse.length > 0) {
-      return 'SELECT ' + groupsToUse.map(group => group.colId).join(", ") + ', sum(gold) as gold, sum(silver) as silver, sum(bronze) as bronze ';
+      return 'SELECT ' + groupsToUse.map(group => group.field).join(", ") + ', sum(gold) as gold, sum(silver) as silver, sum(bronze) as bronze ';
     }
   }
   return 'SELECT *';
@@ -35,7 +35,7 @@ const where = (args) => {
   if (groupKeys) {
     for (let i = 0; i < groupKeys.length; i++) {
       whereClause += (i === 0) ? ' WHERE ' : ' AND ';
-      whereClause += `${rowGroups[i].colId} = '${groupKeys[i]}'`;
+      whereClause += `${rowGroups[i].field} = '${groupKeys[i]}'`;
     }
   }
   return whereClause;
@@ -46,7 +46,7 @@ const groupBy = (args) => {
   if (args.rowGroups.length > 0) {
     let groupsToUse = args.rowGroups.slice(args.groupKeys.length, args.groupKeys.length + 1);
     if (groupsToUse.length > 0) {
-      groupBy += ' GROUP BY ' + groupsToUse.map(group => group.colId).join(", ");
+      groupBy += ' GROUP BY ' + groupsToUse.map(group => group.field).join(", ");
     }
   }
   return groupBy;
